@@ -47,6 +47,7 @@ const Chat = () => {
   const socketRef = useRef<Socket | null>(null);
   const autoscroll = useRef<HTMLDivElement | null>(null);
   const [ifMessagepresent, setIfMessagepresent] = useState(false)//to optimise loading atate
+  const [isSubmitting, setIsSubmitting] = useState(false)
 
   const {
     register,
@@ -54,7 +55,7 @@ const Chat = () => {
     watch,
     setValue,
     reset,
-    formState: { },
+    formState: {  },
   } = useForm<Inputs>()
 
 
@@ -132,6 +133,7 @@ const Chat = () => {
 
   const onSubmit: SubmitHandler<Inputs> = async (data) => {
     try {
+      setIsSubmitting(true)
       setImgPreview('')
       let base64img = "";
       const file = data.image?.[0];
@@ -139,6 +141,7 @@ const Chat = () => {
         base64img = await toBase64(file);
       }
       const res = await axiosInstance.post(`/message/sendmessage/${usertochatwith?._id}`, { text: data.text, image: base64img })
+      setIsSubmitting(false)
       reset();
       setmessages((prev) => [
         ...prev,res.data
@@ -245,9 +248,9 @@ const Chat = () => {
           <div className='lg:w-[60%] w-[100%] relative bg-midnight-blue-100 '>
             <Chatheader setUsertochatwith={setUsertochatwith} usertochatwith={usertochatwith} screenwidth={screenwidth} setChatcontainerformobile={setChatcontainerformobile} setChatcontainer={setChatcontainer} isOnline={isOnline} />
 
-            <Chatmessages ifMessagepresent={ifMessagepresent} usertochatwith={usertochatwith} messages={messages} loggedinuser={loggedinuser} autoscroll={autoscroll} />
+            <Chatmessages isSubmitting={isSubmitting} ifMessagepresent={ifMessagepresent} usertochatwith={usertochatwith} messages={messages} loggedinuser={loggedinuser} autoscroll={autoscroll} />
 
-            <Chatmessageinput setValue={setValue} watch={watch} imgPreview={imgPreview} setimgPreview={setImgPreview} register={register} handleSubmit={handleSubmit} onSubmit={onSubmit} />
+            <Chatmessageinput  setValue={setValue} watch={watch} imgPreview={imgPreview} setimgPreview={setImgPreview} register={register} handleSubmit={handleSubmit} onSubmit={onSubmit} />
 
           </div>
         ) : (

@@ -27,11 +27,12 @@ interface Chatmessage {
   autoscroll: React.RefObject<HTMLDivElement | null>
   usertochatwith: authuser
   ifMessagepresent: boolean
+  isSubmitting: boolean
 }
 
 
 
-const Chatmessages = ({ messages, loggedinuser, autoscroll,usertochatwith,ifMessagepresent }: Chatmessage) => {
+const Chatmessages = ({ messages, loggedinuser, autoscroll,usertochatwith,ifMessagepresent,isSubmitting }: Chatmessage) => {
   const [meslen, setMeslen] = useState(0)
   const date = useRef<string>('')
   useEffect(() => {
@@ -41,6 +42,13 @@ const Chatmessages = ({ messages, loggedinuser, autoscroll,usertochatwith,ifMess
       setMeslen(messages.length)
     }
   }, [messages?.length])
+
+  useEffect(()=>{
+    if(isSubmitting){
+      autoscroll.current?.scrollIntoView({ behavior: 'instant' })
+      
+    }
+  },[isSubmitting])
 
   useEffect(()=>{
     setMeslen(0)
@@ -56,8 +64,7 @@ const Chatmessages = ({ messages, loggedinuser, autoscroll,usertochatwith,ifMess
             (
               <div className='grid mb-[2%] justify-end '>
                 {item.image && <><img className='size-45 object-contain' src={item.image} alt="" /> <p className='text-xs text-white opacity-45'>{timestamp(item.createdAt)}</p></>}
-                {item.text && <><p className='text-white bg-blue-400 px-4 py-2 box-content rounded-sm'>{item.text}</p> <p className='text-xs text-white opacity-45'>{timestamp(item.createdAt)}</p></>}
-                
+                {item.text && <><p className='text-white bg-blue-400 px-4 py-2 box-content rounded-sm'>{item.text}</p> <p className='text-xs text-white opacity-45'>{timestamp(item.createdAt)}</p></>} 
               </div>
             ) : (
               <div className='grid mb-[2%] justify-start '>
@@ -74,6 +81,13 @@ const Chatmessages = ({ messages, loggedinuser, autoscroll,usertochatwith,ifMess
           {!ifMessagepresent && <MessageSkeletons />}
         </>
       )}
+      {isSubmitting && 
+        <div className='flex justify-end'>
+          <div className='size-35 rounded-md animate-pulse bg-gray-800 flex justify-center items-center'>
+            <div className="md:w-5 w-5 h-5 md:h-5 border-3 border-t-white border-gray-300 rounded-full animate-spin"></div>
+          </div>
+        </div>
+      }
       <div ref={autoscroll}></div>
     </div>
 
