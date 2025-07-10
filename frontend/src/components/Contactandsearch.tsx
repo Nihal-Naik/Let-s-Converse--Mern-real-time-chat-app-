@@ -3,7 +3,6 @@ import Contectskeleton from "./skeletons/Contectskeleton"
 import { useEffect, useState } from "react"
 import toast, { Toaster } from "react-hot-toast"
 import { IoCloseOutline } from "react-icons/io5";
-import { Divide } from "lucide-react";
 
 type authuser = {
     name: string

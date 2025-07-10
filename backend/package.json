@@ -26,6 +26,7 @@
     "@types/cors": "^2.8.19",
     "@types/express": "^4.17.23",
     "bcrypt": "^6.0.0",
+    "chat-app": "file:..",
     "cloudinary": "^2.7.0",
     "cookie-parser": "^1.4.7",
     "cors": "^2.8.5",
