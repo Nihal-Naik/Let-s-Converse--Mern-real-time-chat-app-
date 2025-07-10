@@ -38,17 +38,24 @@ const Chatmessageinput = ({ onSubmit, register, handleSubmit, setimgPreview, img
                 <input className='bg-blue-200 w-[70%] p-2 rounded-sm h-[100%] outline-none border-none' placeholder='Type a message...' {...register("text")} />
                 <label htmlFor="send-image" className='w-[10%] flex justify-center cursor-pointer'>
                     <IoMdAttach className='text-white size-8 rotate-45 transition duration-50 ease-in rounded-sm hover:scale-110' />
-                    <input id='send-image' className='hidden' type='file' {...register("image", {
+                    <input id='send-image' accept='image/*' className='hidden' type='file' {...register("image", {
                         onChange: (e) => {
                             const file = e.target.files?.[0];
 
                             if (file) {
+                                if (!file.type.startsWith("image/")) {
+                                    toast.error("Only image files are allowed!");
+                                    e.target.value = ""; 
+                                    setimgPreview('');
+                                    return;
+                                }
+
                                 const maxSize = 10 * 1024 * 1024; // for checking if the img is greater than 10mb
 
                                 if (file.size > maxSize) {
                                     toast.error("Image size exceeds 10MB. Please choose a smaller file.");
                                     e.target.value = "";
-                                    setimgPreview(''); 
+                                    setimgPreview('');
                                     return;
                                 }
 

@@ -131,7 +131,9 @@ const Chat = () => {
 
   const onSubmit: SubmitHandler<Inputs> = async (data) => {
     try {
-      setIsSubmitting(true)
+      if(imgPreview.length>0){
+        setIsSubmitting(true)
+      }
       setImgPreview('')
       let base64img = "";
       const file = data.image?.[0];
@@ -139,7 +141,9 @@ const Chat = () => {
         base64img = await toBase64(file);
       }
       const res = await axiosInstance.post(`/message/sendmessage/${usertochatwith?._id}`, { text: data.text, image: base64img })
-      setIsSubmitting(false)
+      if(imgPreview.length>0){
+        setIsSubmitting(false)
+      }
       reset();
       setmessages((prev) => [
         ...prev,res.data
