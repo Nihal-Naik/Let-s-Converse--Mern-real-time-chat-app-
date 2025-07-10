@@ -5,6 +5,7 @@ import { axiosInstance } from "../lib/axios"
 import toast, { Toaster } from "react-hot-toast"
 import axios from "axios"
 import { toBase64 } from "../lib/tobase64"
+import { useNavigate } from "react-router"
 
 type Inputs = {
   name: string
@@ -18,7 +19,7 @@ type authuser = {
 }
 
 const profile = () => {
-
+  const navigate=useNavigate()
   const [selectedfile, setselectedfile] = useState<string | null>(null)
   const [loggedinuser, setLoggedinuser] = useState<authuser | null>()
 
@@ -41,7 +42,7 @@ const profile = () => {
   const {
     register,
     handleSubmit,
-    formState: { errors, isSubmitting },
+    formState: { isSubmitting },
   } = useForm<Inputs>()
 
 
@@ -57,6 +58,7 @@ const profile = () => {
       }
       const res = await axiosInstance.post("/auth/updateprofile", { avatar: base64img })
       toast.success(res.data.msg)
+      navigate('/chats')
     } catch (error) {
       if (axios.isAxiosError(error)) {
         toast.error(error.response?.data?.msg)
@@ -99,8 +101,11 @@ const profile = () => {
 
           </div>
 
-          <button disabled={isSubmitting} className='flex justify-center gap-4 items-center bg-[rgb(21,112,239)] rounded-md cursor-pointer font-bold text-xs md:text-lg text-white p-2 mt-4 ' type="submit">
+          <button disabled={isSubmitting} className='flex justify-center items-center bg-[rgb(21,112,239)] rounded-md cursor-pointer font-bold text-xs md:text-lg text-white p-2 mt-4 ' type="submit">
             {isSubmitting && <div className="md:w-5 w-4 h-4 md:h-5 border-3 border-t-white border-gray-300 rounded-full animate-spin"></div>}Update profile
+          </button>
+          <button onClick={()=>navigate('/chats')} disabled={isSubmitting} className='flex justify-center items-center bg-[rgb(229,240,255)] rounded-md cursor-pointer font-bold text-xs md:text-lg text-black p-2 mt-4 '>
+            Take me Back
           </button>
 
         </div>

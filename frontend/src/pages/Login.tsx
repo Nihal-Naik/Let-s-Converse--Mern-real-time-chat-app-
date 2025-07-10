@@ -72,7 +72,7 @@ const login = () => {
           <button disabled={isSubmitting} className='flex justify-center gap-4 items-center bg-[rgb(21,112,239)] rounded-md cursor-pointer font-bold text-xs md:text-lg text-white p-2 mt-4 ' type="submit">
             {isSubmitting && <div className="md:w-5 w-4 h-4 md:h-5 border-3 border-t-white border-gray-300 rounded-full animate-spin"></div>}Create an account
           </button>
-          <p className='md:text-lg text-xs'>Don't have an account? <NavLink className="cursor-pointer text-[rgb(21,112,239)]" to="/signup">
+          <p className='md:text-lg text-xs'>Don't have an account? <NavLink className="cursor-pointer text-[rgb(21,112,239)]" to="/">
             Signup
           </NavLink> </p>
         </div>

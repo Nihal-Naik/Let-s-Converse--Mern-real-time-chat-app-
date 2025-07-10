@@ -11,18 +11,18 @@ type authuser = {
 interface Chatheader{
     screenwidth:number
     usertochatwith:authuser|null
-    setChatcontainerformobile:Dispatch<SetStateAction<boolean>>
+    setcontactscontainer:Dispatch<SetStateAction<boolean>>
     setChatcontainer:Dispatch<SetStateAction<boolean>>
     isOnline:string[]|null|undefined
     setUsertochatwith:Dispatch<SetStateAction<authuser | null | undefined>>
 }
 
-const Chatheader = ({setUsertochatwith,screenwidth,usertochatwith,setChatcontainer,setChatcontainerformobile,isOnline}:Chatheader) => {
+const Chatheader = ({setUsertochatwith,screenwidth,usertochatwith,setChatcontainer,setcontactscontainer,isOnline}:Chatheader) => {
     return (
         <div className='flex w-[100%] h-[8%] items-center'>
             {screenwidth < 1024 &&
                 <div className='w-[10%] flex justify-center items-center'>
-                    <IoIosArrowBack onClick={() => { setChatcontainerformobile(true), setChatcontainer(false),setUsertochatwith(null) }} className='text-white size-10 active:bg-blue-200 rounded-sm transition ease-in-out' />
+                    <IoIosArrowBack onClick={() => { setcontactscontainer(true), setChatcontainer(false),setUsertochatwith(null) }} className='text-white size-10 active:bg-blue-200 rounded-sm transition ease-in-out' />
                 </div>
             }
             <div className='w-[10%] ml-1 flex justify-center items-center'>

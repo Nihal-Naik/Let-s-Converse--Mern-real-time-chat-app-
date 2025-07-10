@@ -2,7 +2,7 @@ import { StrictMode } from 'react'
 import * as ReactDom from 'react-dom/client'
 import './index.css'
 import { createBrowserRouter,RouterProvider } from 'react-router'
-import Signup from './pages/Signup'
+import SignupHome from './pages/SignupHome'
 import Login from './pages/Login'
 import Profile from './pages/Profile'
 import Chat from './pages/Chat'
@@ -13,8 +13,8 @@ const router=createBrowserRouter([
     element: <Chat />
   },
   {
-    path:'/signup',
-    element: <Signup />
+    path:'/',
+    element: <SignupHome />
   },
   {
     path:'/login',

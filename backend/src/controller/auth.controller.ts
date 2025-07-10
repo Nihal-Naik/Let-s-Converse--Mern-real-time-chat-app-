@@ -58,10 +58,10 @@ export const logout=(req:Request,res:Response)=>{
         res.cookie("chatapp","",{
             maxAge:0
         })
-        res.status(200).json({message:"Logged out successfully"})
+        res.status(200).json({msg:"Logged out successfully"})
     } catch (error) {
         console.log("Logout error ",error)
-        res.status(500).json({message:"Internal server error"})
+        res.status(500).json({msg:"Internal server error"})
     }
 }
 export const checkauth=(req:Request,res:Response)=>{

@@ -40,7 +40,7 @@ const Chat = () => {
   const [contacts, setcontacts] = useState<authuser[] | null>()
   const [usertochatwith, setUsertochatwith] = useState<authuser | null>()
   const [chatcontainer, setChatcontainer] = useState(false)//for responsiveness
-  const [chatcontainerformobile, setChatcontainerformobile] = useState(false)//for responsiveness
+  const [contactscontainer, setcontactscontainer] = useState(false)//for responsiveness
   const [messages, setmessages] = useState<messagesauth[]>([])
   const [isOnline, setIsOnline] = useState<string[] | null>()
   const [imgPreview, setImgPreview] = useState<string>('')
@@ -60,39 +60,37 @@ const Chat = () => {
 
 
 
-  useEffect(() => {
-
-    if (loggedinuser) {
-      connecttosocket()
-      getusers()
-    } else {
-      checkauth()
-    }
+  useEffect(() => {//to detect screen width
     const detectscreenwidth = () => {
       setscreenwidth(window.innerWidth)
     }
     window.addEventListener('resize', detectscreenwidth)
     if (screenwidth < 1024) {
-      setChatcontainerformobile(true)
+      setcontactscontainer(true)
       setChatcontainer(false)
     } else {
       setChatcontainer(true)
-      setChatcontainerformobile(true)
+      setcontactscontainer(true)
     }
-
-
     return () => {
       window.removeEventListener('resize', detectscreenwidth)
     }
 
-  }, [loggedinuser]);
+  }, []);
 
-  useEffect(() => {
+  useEffect(()=>{//to check auth and connect to socket
+    if (loggedinuser) {
+      connecttosocket()
+      getusers()
+      
+    } else {
+      checkauth()
+    }
+  },[loggedinuser,usertochatwith?._id])
+
+  useEffect(() => {//to manage real time messages
     const socket = socketRef.current;
     if (!socket || !usertochatwith?._id) return;
-
-    
-
     getmessage()
     Subscribetomessage()
 
@@ -175,8 +173,10 @@ const Chat = () => {
   }
   const getusers = async () => {
     try {
-      const res = await axiosInstance.get("/message/getusers")
-      setcontacts(res.data)
+      if(!contacts){
+        const res = await axiosInstance.get("/message/getusers")
+        setcontacts(res.data)
+      }
     } catch (error) {
       if (axios.isAxiosError(error)) {
         toast.error(error.response?.data?.msg)
@@ -213,10 +213,10 @@ const Chat = () => {
     setUsertochatwith(user)
     if (screenwidth < 1024) {
       setChatcontainer(true)
-      setChatcontainerformobile(false)
+      setcontactscontainer(false)
     } else {
       setChatcontainer(true)
-      setChatcontainerformobile(true)
+      setcontactscontainer(true)
     }
   }
 
@@ -225,6 +225,7 @@ const Chat = () => {
       const res = await axiosInstance.post("/auth/logout")
       toast.success(res.data.msg)
       disconnectsocket()
+      navigate('/login')
     } catch (error) {
       if (axios.isAxiosError(error)) {
         toast.error(error.response?.data?.msg)
@@ -236,7 +237,7 @@ const Chat = () => {
 
   return (
     <section className='h-screen w-full flex relative'>
-      {chatcontainerformobile &&
+      {contactscontainer &&
         <>
           <Sidebar loggedinuser={loggedinuser} handlelogout={handlelogout} />
           <Contactandsearch contacts={contacts} handleuserchatdisplay={handleuserchatdisplay} />
@@ -246,7 +247,7 @@ const Chat = () => {
       {chatcontainer && usertochatwith ?
         (
           <div className='lg:w-[60%] w-[100%] relative bg-midnight-blue-100 '>
-            <Chatheader setUsertochatwith={setUsertochatwith} usertochatwith={usertochatwith} screenwidth={screenwidth} setChatcontainerformobile={setChatcontainerformobile} setChatcontainer={setChatcontainer} isOnline={isOnline} />
+            <Chatheader setUsertochatwith={setUsertochatwith} usertochatwith={usertochatwith} screenwidth={screenwidth} setcontactscontainer={setcontactscontainer} setChatcontainer={setChatcontainer} isOnline={isOnline} />
 
             <Chatmessages isSubmitting={isSubmitting} ifMessagepresent={ifMessagepresent} usertochatwith={usertochatwith} messages={messages} loggedinuser={loggedinuser} autoscroll={autoscroll} />
 
